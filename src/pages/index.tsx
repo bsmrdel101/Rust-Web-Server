@@ -1,20 +1,18 @@
 import TaskList from "@/components/TaskList";
 import Layout from "../components/Layout";
-import { useEffect, useState } from "react";
 import { getTasks } from "@/scripts/controllers/tasksController";
 
-export default function Index() {
-  const [tasks, setTasks] = useState<Task[]>([]);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const tasks = await getTasks();
-      setTasks(tasks);
-    };
-    fetchTasks();
-  }, []);
-  
+interface Props {
+  tasks: Task[]
+}
 
+export async function getServerSideProps() {
+  const tasks = await getTasks();
+  return { props: { tasks: tasks } };
+}
+
+export default function Index({ tasks }: Props) {
   return (
     <Layout>
       <h1>Todo List</h1>
